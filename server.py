@@ -6,16 +6,15 @@ from Constants import Constants
 from Player import Player
 import images
 import pygame
-
+from images import *
 
 #Constants
 Constants = Constants()
 
 #Varibles & Lists
 currentClient = 0
-p1 = Player(0,0,(0,255,0))
-p2 = Player(100,100,(255,0,0))
-clientInfo = [p1,p2]
+
+clientInfo = [Player(50,300),Player(750,300,False)]
 
 #Making the socket
 socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
