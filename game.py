@@ -18,15 +18,15 @@ player = n.startingPos
 
 while run:
     clock.tick(60)
-    screen.fill((255,255,255))
+    screen.fill((0,0,0))
     player2 = n.Send(player)
     
     
     for event in pygame.event.get():
-        if event.type == pygame.WINDOWCLOSE:
+        if event.type == pygame.QUIT:
             run = False
-            n.Send("/?/")
-    
+            
+                
    
     player.move(screen)
     player2.update(screen)

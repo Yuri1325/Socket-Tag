@@ -3,8 +3,8 @@ import pickle
 from images import*
 # pygame.init()
 # pygame.display.set_mode((800,600))
-idleAnimation = ["images/Idle/tile000.png","images/Idle/tile001.png","images/Idle/tile002.png","images/Idle/tile003.png","images/Idle/tile004.png","images/Idle/tile005.png",]
-runAnimation = ["images/Run/tile003.png","images/Run/tile004.png","images/Run/tile005.png"]
+idleAnimation = ["images/Idle/tile000.png","images/Idle/tile001.png","images/Idle/tile002.png","images/Idle/tile003.png","images/Idle/tile004.png","images/Idle/tile005.png","images/Idle/tile006.png","images/Idle/tile007.png","images/Idle/tile008.png","images/Idle/tile009.png"]
+runAnimation = ["images/Run/tile000.png","images/Run/tile001.png","images/Run/tile002.png","images/Run/tile003.png","images/Run/tile004.png","images/Run/tile005.png","images/Run/tile006.png","images/Run/tile007.png"]
 
 playerIdle = False
 class Player(pygame.sprite.Sprite):

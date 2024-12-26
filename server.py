@@ -23,25 +23,31 @@ socket.listen(2)
 print("[SERVER STARTED] Waiting for connection...............")
 
 def threadedClient(conn,client):
+    global currentClient
     conn.send(pickle.dumps(clientInfo[client]))
     reply = ""
     data = ""
     while True:
-        data = pickle.loads(conn.recv(2048))
-        clientInfo[client] = data
-        if not data or data == "/?/":
-            print("[DISCONNECTING] ")
+        try:
+            data = pickle.loads(conn.recv(2048))
+            clientInfo[client] = data
+            if not data :
+                print("[DISCONNECTING] ")
+                break
+            if (client==0):
+                reply= clientInfo[1]
+            else:
+                reply = clientInfo[0]
+        except:
             break
-        if (client==0):
-            reply= clientInfo[1]
-        else:
-            reply = clientInfo[0]
         conn.sendall(pickle.dumps(reply))
 
-
-
+    print(f"[DISCONNECTING] Client {client} disconected")
+    currentClient -=1
+    conn.close()
 while True:
+    
     conn,addr = socket.accept()
-    print("[NEW CONNECTION] ",addr)
+    print(f"[NEW CONNECTION] Client {currentClient}",addr)
     start_new_thread(threadedClient,(conn,currentClient))
     currentClient+=1
