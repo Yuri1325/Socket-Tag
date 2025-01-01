@@ -27,9 +27,9 @@ class Player(pygame.sprite.Sprite):
         self.H_friction = 0.25
         self.V_aceleration =3
         self.V_friction = 0.25
-        self.last_roll_time = 0  # Timestamp of the last roll
-        self.roll_cooldown = 3   # Cooldown time in seconds
-        self.is_rolling = False # To track if currently rolling
+        self.last_roll_time = 0  
+        self.roll_cooldown = 3   
+        self.is_rolling = False 
         self.roll_duration = 0.5
         self.roll_speed = 10
         self.speed = 10
@@ -38,6 +38,7 @@ class Player(pygame.sprite.Sprite):
         self.collidingR = False
         self.collidingT = False
         self.collidingB = False
+        self.collidingSSS = False
     def setAnimation_Idle(self):
         self.currentAnimation = idleAnimation
     def setAnimation_Run(self):
@@ -78,25 +79,29 @@ class Player(pygame.sprite.Sprite):
             # Horizontal movement
 
             if (keys[pygame.K_LEFT] or keys[pygame.K_a]):
-                if not self.collidingR:
-                    self.aceleration.x = -self.H_aceleration
-                    self.facingRight = False
-                    self.setAnimation_Run()
-            elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]):
                 if not self.collidingL:
+                    self.aceleration.x = -self.H_aceleration
+                    self.collidingR = False
+                    self.facingRight = False
+                self.setAnimation_Run()
+            elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]):
+                if not self.collidingR:
                     self.aceleration.x = self.H_aceleration
                     self.facingRight = True
-                    self.setAnimation_Run()
+                    self.collidingL = False
+                self.setAnimation_Run()
 
         # Vertical movement
             if (keys[pygame.K_UP] or keys[pygame.K_w]):
                 if not self.collidingB:
                     self.aceleration.y = -self.V_aceleration
-                    self.setAnimation_Run()
+                    self.collidingT = False
+                self.setAnimation_Run()
             elif (keys[pygame.K_DOWN] or keys[pygame.K_s]):
                 if not self.collidingT:
                     self.aceleration.y = self.V_aceleration
-                    self.setAnimation_Run()
+                    self.collidingB = False
+                self.setAnimation_Run()
 
             # Normalize diagonal movement
             if self.aceleration.x != 0 and self.aceleration.y != 0:
@@ -114,10 +119,36 @@ class Player(pygame.sprite.Sprite):
             
 
        
-
+    def collideWith(self,rect):
+         
+        if self.rect.colliderect(rect.rect):
+            if not rect.horizontal:
+                self.velocity.x = -self.velocity.x
+            
+                if self.pos.x > rect.x:
+                        self.collidingL = True
+                    
+                elif self.pos.x < rect.x:
+                        self.collidingR = True
+            else:
+                self.velocity.y = -self.velocity.y
+                if self.pos.y > rect.y:
+                    self.collidingB = True
+                elif self.pos.y < rect.y:
+                    self.collidingT = True
+        
+       
+            
+           
+            
+            
+           
+            
+            
+            
     def update(self,win):
         
-        if not self.is_rolling :
+        if not self.is_rolling:
             self.aceleration.x -= self.velocity.x * self.H_friction
             self.aceleration.y -= self.velocity.y * self.V_friction
        
@@ -128,7 +159,9 @@ class Player(pygame.sprite.Sprite):
         self.currentImage+=1
         if self.currentImage>= len(self.currentAnimation):
             self.currentImage = 0
-
+            
+        
+        
         
         self.image = pygame.image.load(self.currentAnimation[self.currentImage]).convert_alpha()
         if self.facingRight:

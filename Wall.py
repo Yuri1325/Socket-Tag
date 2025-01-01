@@ -1,9 +1,10 @@
 import pygame
 class Wall(pygame.sprite.Sprite):
-    def __init__(self,x,y,width,height):
+    def __init__(self,x,y,width,height,horizontal):
         super().__init__()
         self.x = x
         self.y = y
+        self.horizontal = horizontal
         self.width = width
         self.height = height
         self.color = (255,255,255)
@@ -13,3 +14,4 @@ class Wall(pygame.sprite.Sprite):
         self.rect.center = (self.x,self.y)
         pygame.draw.rect(win,self.color,self.rect)
 
+  
