@@ -4,6 +4,7 @@ from Player import Player
 from Wall import Wall
 from Text import Text
 from _thread import *
+from Button import Button
 import math
 import time
 
@@ -26,25 +27,25 @@ wallList = [leftWall,rightWall,topWall,bottomWall]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
+
 def intro(timeElapsed):
    
     
     displayTime = Text(f"Time Elapsed({timeElapsed})",arial,(255,255,255),100,10,screen)
     isplayTime = Text(f"Mouse Pos ({pygame.mouse.get_pos()})",arial,(255,255,255),200,10,screen)
     if not introFinished:
-        if (timeElapsed < 10):
+        if (timeElapsed < 5):
             presentsCard = Text("Computer Science 1 2024-2025",pxlf1,(255,255,255),70,200,screen)
             presentsCard2 = Text("Presents",pxlf1,(255,255,255),300,250,screen)
         else:
-            titleCard = Text("TAG",pygame.font.Font("Fonts\yoster.ttf",100),(255,255,255),300,100,screen)
-            credCard = Text("by Uri R",pygame.font.SysFont("Arial",10,True),(255,255,255),300,150,screen)
-        
+            titleCard = Text("TAG",pygame.font.Font("Fonts\yoster.ttf",100),(255,255,255),290,100,screen)
+            playButton = Button(400,200,pygame.image.load("images/titleButton.png").convert_alpha(),screen,0.3,1)
+            
         
     
 
 while run:
-    pygame.draw.line(screen,(255,255,255),(400,0),(400,600),3)
-    pygame.draw.line(screen,(255,255,255),(0,600),(800,600),3)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
