@@ -30,9 +30,10 @@ topWall = Wall(400,0,800,10,True)
 bottomWall = Wall(400,600,800,10,True)
 wallList = [leftWall,rightWall,topWall,bottomWall]
 startTime = time.time()
-arial = pygame.font.SysFont("Arial",15)
+arial = pygame.font.SysFont("Arial",15,True)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
 creatingNewServer = True
+n = Network()
 def intro(timeElapsed):
         global introFinished,serverSelected
         if (timeElapsed < 5):
@@ -65,7 +66,7 @@ while run:
     isplayTime = Text(f"Mouse Pos ({pygame.mouse.get_pos()})",arial,(255,255,255),200,10,screen)   
     if inGame:
         
-        n = Network()
+        
         
         player = n.startingPos
        
@@ -76,7 +77,7 @@ while run:
         player2.update(screen)
         for wall in wallList:
             wall.draw(screen)
-        player.collideWith(wall)
+            player.collideWith(wall)
     
     if ((introFinished==True)and(serverSelected==True)):
         inGame = True 
