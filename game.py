@@ -7,12 +7,17 @@ from _thread import *
 from Button import Button
 import math
 import time
+import socket
+
 
 
 pygame.init()
 pygame.mouse.set_visible(True)
 
+
 introFinished = False
+serverSelected = False
+inGame = False
 screenWidth = 800
 screenHeight = 600
 screen = pygame.display.set_mode((screenWidth,screenHeight))
@@ -27,23 +32,26 @@ wallList = [leftWall,rightWall,topWall,bottomWall]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
-
+creatingNewServer = True
 def intro(timeElapsed):
-   
-    
-    displayTime = Text(f"Time Elapsed({timeElapsed})",arial,(255,255,255),100,10,screen)
-    isplayTime = Text(f"Mouse Pos ({pygame.mouse.get_pos()})",arial,(255,255,255),200,10,screen)
-    if not introFinished:
+        global introFinished,serverSelected
         if (timeElapsed < 5):
             presentsCard = Text("Computer Science 1 2024-2025",pxlf1,(255,255,255),70,200,screen)
             presentsCard2 = Text("Presents",pxlf1,(255,255,255),300,250,screen)
         else:
             titleCard = Text("TAG",pygame.font.Font("Fonts\yoster.ttf",100),(255,255,255),290,100,screen)
-            playButton = Button(400,200,pygame.image.load("images/titleButton.png").convert_alpha(),screen,0.3,1)
+            startButton = Button(400,250,pygame.image.load("images\Buttons\start.png").convert_alpha(),pygame.image.load("images\Buttons\starthighlight.png").convert_alpha(),screen,0.3)
             
-        
+            if startButton.isClicked:
+                introFinished = True
+                
     
-
+def serverMenu():
+    global serverSelected
+    startNewServer = Button(400,200,pygame.image.load("images\Buttons\strtnewserverbutton.png").convert_alpha(),pygame.image.load("images\Buttons\highlightedsns.png").convert_alpha(),screen,0.5)
+    if startNewServer.isClicked:
+                creatingNewServer = True
+                serverSelected = True
 while run:
     
     for event in pygame.event.get():
@@ -52,9 +60,13 @@ while run:
     currentTime = time.time() 
     timeElapsed = int(currentTime - startTime)  
     clock.tick(25)
-    screen.fill((0,0,0))      
-    if introFinished:
+    screen.fill((0,0,0))   
+    displayTime = Text(f"Time Elapsed({timeElapsed})",arial,(255,255,255),100,10,screen)
+    isplayTime = Text(f"Mouse Pos ({pygame.mouse.get_pos()})",arial,(255,255,255),200,10,screen)   
+    if inGame:
+        
         n = Network()
+        
         player = n.startingPos
        
         
@@ -66,9 +78,12 @@ while run:
             wall.draw(screen)
         player.collideWith(wall)
     
-    
-    
-    intro(timeElapsed)        
+    if ((introFinished==True)and(serverSelected==True)):
+        inGame = True 
+    if not introFinished:
+        intro(timeElapsed) 
+    if introFinished and not serverSelected:
+        serverMenu()       
                 
    
     

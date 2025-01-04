@@ -19,4 +19,3 @@ class Network:
     def Send (self,objct):
        self.client.send(pickle.dumps(objct))
        return pickle.loads(self.client.recv(2048))
-
