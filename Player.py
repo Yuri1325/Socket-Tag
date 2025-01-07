@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.currentAnimation = idleAnimation
         self.image = pygame.transform.scale(pygame.image.load(self.currentAnimation[self.currentImage]),(92,92))
         self.rect = self.image.get_rect()
+        
         self.rect.center = (x, y)
         self.x = x
         self.y = y
@@ -189,3 +190,5 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.x, self.y)
     
     
+
+

@@ -22,7 +22,7 @@ inGame = False
 screenWidth = 800
 screenHeight = 600
 screen = pygame.display.set_mode((screenWidth,screenHeight))
-pygame.display.set_caption("Tag")
+pygame.display.set_caption("PyTag Online")
 pygame.display.set_icon(pygame.image.load("images\Run/tile003.png").convert_alpha())
 clock = pygame.time.Clock()
 run = True
@@ -44,7 +44,7 @@ def intro(timeElapsed):
             presentsCard = Text("Computer Science 1 2024-2025",pxlf1,(255,255,255),50,200,screen)
             presentsCard2 = Text("Presents",pxlf1,(255,255,255),280,250,screen)
         else:
-            titleCard = Text("TAG",pygame.font.Font("Fonts\yoster.ttf",100),(255,255,255),290,100,screen)
+            titleCard = Text("PYTAG ONLINE",pygame.font.Font("Fonts\yoster.ttf",70),(255,255,255),150,100,screen)
             startButton = Button(400,250,pygame.image.load("images\Buttons/5811aefe875733a49f167ca73a33c02a.png").convert_alpha(),pygame.image.load("images\Buttons\starthighlight.png").convert_alpha(),screen,0.5)
             
             if startButton.isClicked:
@@ -77,6 +77,7 @@ while run:
         for wall in wallList:
             wall.draw(screen)
             player.collideWith(wall)
+        # if pygame
     
     if ((introFinished==True)and(serverSelected==True)):
         inGame = True 
