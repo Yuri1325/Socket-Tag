@@ -77,8 +77,7 @@ while run:
         for wall in wallList:
             wall.draw(screen)
             player.collideWith(wall)
-        # if pygame
-    
+           
     if ((introFinished==True)and(serverSelected==True)):
         inGame = True 
     if not introFinished:
