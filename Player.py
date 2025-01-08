@@ -15,9 +15,12 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.currentImage = 0
         self.currentAnimation = idleAnimation
+
         self.image = pygame.transform.scale(pygame.image.load(self.currentAnimation[self.currentImage]),(92,92))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+        self.mask = pygame.mask.from_surface(self.image)
+        
         self.x = x
         self.y = y
         self.pos = vector(self.x,self.y)
@@ -39,6 +42,8 @@ class Player(pygame.sprite.Sprite):
         self.collidingT = False
         self.collidingB = False
         self.collidingSSS = False
+        self.offX = self.pos.x - self.rect.left
+        self.offY = self.pos.y - self.rect.top
     def setAnimation_Idle(self):
         self.currentAnimation = idleAnimation
     def setAnimation_Run(self):
@@ -136,6 +141,7 @@ class Player(pygame.sprite.Sprite):
                     self.collidingB = True
                 elif self.pos.y < rect.y:
                     self.collidingT = True
+            
         
        
             
@@ -168,7 +174,8 @@ class Player(pygame.sprite.Sprite):
             win.blit(self.image,self.rect)
         else:
            win.blit(pygame.transform.flip(self.image,True,False),self.rect) 
-        
+        self.offX = self.pos.x - self.rect.left
+        self.offY = self.pos.y - self.rect.top
     
            
         
@@ -178,6 +185,7 @@ class Player(pygame.sprite.Sprite):
         # Exclude the non-serializable attributes
         del state['image']
         del state['rect']
+        del state['mask']
         return state
 
     def __setstate__(self, state):
@@ -186,8 +194,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((50, 50))
         self.image.fill((255, 255, 255))
         self.rect = self.image.get_rect()
-        self.rect.center = (self.x, self.y)
+        self.rect.center = (self.pos.x,self.pos.y)
+        self.mask = pygame.mask.from_surface(self.image)
     
     
 
 
+  

@@ -31,8 +31,8 @@ leftWall = Wall(0,300,10,600,False)
 rightWall = Wall(800,300,10,600,False)
 topWall = Wall(400,0,800,10,True)
 bottomWall = Wall(400,600,800,10,True)
-w1= Wall(400,100,10,75,False)
-wallList = [leftWall,rightWall,topWall,bottomWall,w1]
+
+wallList = [leftWall,rightWall,topWall,bottomWall,]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15,True)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
@@ -72,12 +72,16 @@ while run:
         
         playerCords = Text(f"Player Pos {round(player.pos)}",arial,(255,255,255),10,50,screen)
         player2 = n.Send(player)
+        
         player.move(screen)
         player2.update(screen)
         for wall in wallList:
             wall.draw(screen)
             player.collideWith(wall)
-           
+        
+        if(player.mask.overlap(player2.mask,(player2.pos.x - player.pos.x,player2.pos.y - player.pos.y))):
+            print("Colliding")
+        screen.blit(player.mask.to_surface(),(200,200))
     if ((introFinished==True)and(serverSelected==True)):
         inGame = True 
     if not introFinished:
