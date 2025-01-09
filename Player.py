@@ -37,17 +37,19 @@ class Player(pygame.sprite.Sprite):
         self.roll_speed = 10
         self.speed = 10
         self.facingRight = facingRight
-        self.collidingL = False
-        self.collidingR = False
-        self.collidingT = False
-        self.collidingB = False
-        self.collidingSSS = False
+        self.collidingFromUnder = False
+        self.collidingFromTop = False
+        self.collidingFromLeft = False
+        self.collidingFromRight = False
+        
+        
         self.offX = self.pos.x - self.rect.left
         self.offY = self.pos.y - self.rect.top
     def setAnimation_Idle(self):
         self.currentAnimation = idleAnimation
     def setAnimation_Run(self):
         self.currentAnimation = runAnimation
+        
     def setAnimation_Roll(self):
         self.currentAnimation = rollAnimation
     def move(self,win):
@@ -60,6 +62,7 @@ class Player(pygame.sprite.Sprite):
         current_time = time.time()
 
         # Handle rolling
+    
         if keys[pygame.K_SPACE] and not self.is_rolling and current_time - self.last_roll_time >= self.roll_cooldown:
             self.last_roll_time = current_time
             self.is_rolling = True
@@ -84,28 +87,43 @@ class Player(pygame.sprite.Sprite):
             # Horizontal movement
 
             if (keys[pygame.K_LEFT] or keys[pygame.K_a]):
-                if not self.collidingL:
-                    self.aceleration.x = -self.H_aceleration
-                    self.collidingR = False
-                    self.facingRight = False
+                if not self.collidingFromRight:
+                    self.aceleration.x = -self.H_aceleration 
+                else:
+                    self.aceleration.x = self.H_aceleration
+                
+                self.facingRight = False
                 self.setAnimation_Run()
             elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]):
-                if not self.collidingR:
+                #put code here to detect if the player is touching a wall while moving right
+                #if the player touches a wall while moving right, change the player position
+                #by the x acceleration multiplied by negative one, so when they move right
+                #by like 10 steps, then they move back 10 steps, meaning they dont move at all
+                if not self.collidingFromLeft:
                     self.aceleration.x = self.H_aceleration
-                    self.facingRight = True
-                    self.collidingL = False
+                else:
+                   self.aceleration.x = -self.H_aceleration
+                self.facingRight = True
+                
                 self.setAnimation_Run()
 
         # Vertical movement
             if (keys[pygame.K_UP] or keys[pygame.K_w]):
-                if not self.collidingB:
+                
+                if not self.collidingFromUnder:
                     self.aceleration.y = -self.V_aceleration
-                    self.collidingT = False
+                else: 
+                    self.aceleration.y = self.V_aceleration
+                
+                
                 self.setAnimation_Run()
             elif (keys[pygame.K_DOWN] or keys[pygame.K_s]):
-                if not self.collidingT:
+               
+                if not self.collidingFromTop:
                     self.aceleration.y = self.V_aceleration
-                    self.collidingB = False
+                else:
+                    self.aceleration.y = -self.V_aceleration
+                
                 self.setAnimation_Run()
 
             # Normalize diagonal movement
@@ -124,24 +142,7 @@ class Player(pygame.sprite.Sprite):
             
 
        
-    def collideWith(self,rect):
-         
-        if self.rect.colliderect(rect.rect):
-            if not rect.horizontal:
-                self.velocity.x = -self.velocity.x
-            
-                if self.pos.x > rect.x:
-                        self.collidingL = True
-                    
-                elif self.pos.x < rect.x:
-                        self.collidingR = True
-            else:
-                self.velocity.y = -self.velocity.y
-                if self.pos.y > rect.y:
-                    self.collidingB = True
-                elif self.pos.y < rect.y:
-                    self.collidingT = True
-            
+    
         
        
             
@@ -170,6 +171,7 @@ class Player(pygame.sprite.Sprite):
         
         
         self.image = pygame.image.load(self.currentAnimation[self.currentImage]).convert_alpha()
+        self.mask = pygame.mask.from_surface(self.image)
         if self.facingRight:
             win.blit(self.image,self.rect)
         else:

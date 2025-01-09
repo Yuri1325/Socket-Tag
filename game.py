@@ -31,7 +31,7 @@ leftWall = Wall(0,300,10,600,False)
 rightWall = Wall(800,300,10,600,False)
 topWall = Wall(400,0,800,10,True)
 bottomWall = Wall(400,600,800,10,True)
-
+startbutton = None
 wallList = [leftWall,rightWall,topWall,bottomWall,]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15,True)
@@ -45,15 +45,15 @@ def intro(timeElapsed):
             presentsCard2 = Text("Presents",pxlf1,(255,255,255),280,250,screen)
         else:
             titleCard = Text("PYTAG ONLINE",pygame.font.Font("Fonts\yoster.ttf",70),(255,255,255),150,100,screen)
-            startButton = Button(400,250,pygame.image.load("images\Buttons/5811aefe875733a49f167ca73a33c02a.png").convert_alpha(),pygame.image.load("images\Buttons\starthighlight.png").convert_alpha(),screen,0.5)
-            
+            startButton = Button(400,250,pygame.image.load("images\Buttons/5811aefe875733a49f167ca73a33c02a.png").convert_alpha(),pygame.image.load("images\Buttons\Screenshot 2025-01-08 134028.png").convert_alpha(),screen,0.5)
+            startButton.update(screen)
             if startButton.isClicked:
                 introFinished = True
                 serverSelected = True
     
 
 while run:
-    
+    global startButton 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -77,11 +77,21 @@ while run:
         player2.update(screen)
         for wall in wallList:
             wall.draw(screen)
-            player.collideWith(wall)
-        
+            if (player.rect.colliderect(wall.rect)) and (player.pos.x > wall.x):
+                player.collidingFromRight = True
+            else:
+                player.collidingFromRight = False
+            if (player.rect.colliderect(wall.rect)) and (player.pos.x < wall.x):
+                player.collidingFromLeft = True
+            else:
+                player.collidingFromLeft = False
+               
+                
+                    
+
         if(player.mask.overlap(player2.mask,(player2.pos.x - player.pos.x,player2.pos.y - player.pos.y))):
-            print("Colliding")
-        screen.blit(player.mask.to_surface(),(200,200))
+            print("Colliding w/ Other Player")
+        
     if ((introFinished==True)and(serverSelected==True)):
         inGame = True 
     if not introFinished:
