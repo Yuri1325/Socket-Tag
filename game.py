@@ -77,14 +77,9 @@ while run:
         player2.update(screen)
         for wall in wallList:
             wall.draw(screen)
-            if (player.rect.colliderect(wall.rect)) and (player.pos.x > wall.x):
-                player.collidingFromRight = True
-            else:
-                player.collidingFromRight = False
-            if (player.rect.colliderect(wall.rect)) and (player.pos.x < wall.x):
-                player.collidingFromLeft = True
-            else:
-                player.collidingFromLeft = False
+        player.check_wall_collision(wallList)
+            
+            
                
                 
                     

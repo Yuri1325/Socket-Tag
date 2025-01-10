@@ -37,10 +37,7 @@ class Player(pygame.sprite.Sprite):
         self.roll_speed = 10
         self.speed = 10
         self.facingRight = facingRight
-        self.collidingFromUnder = False
-        self.collidingFromTop = False
-        self.collidingFromLeft = False
-        self.collidingFromRight = False
+        
         
         
         self.offX = self.pos.x - self.rect.left
@@ -87,10 +84,9 @@ class Player(pygame.sprite.Sprite):
             # Horizontal movement
 
             if (keys[pygame.K_LEFT] or keys[pygame.K_a]):
-                if not self.collidingFromRight:
-                    self.aceleration.x = -self.H_aceleration 
-                else:
-                    self.aceleration.x = self.H_aceleration
+                
+                self.aceleration.x = -self.H_aceleration 
+                
                 
                 self.facingRight = False
                 self.setAnimation_Run()
@@ -99,10 +95,9 @@ class Player(pygame.sprite.Sprite):
                 #if the player touches a wall while moving right, change the player position
                 #by the x acceleration multiplied by negative one, so when they move right
                 #by like 10 steps, then they move back 10 steps, meaning they dont move at all
-                if not self.collidingFromLeft:
-                    self.aceleration.x = self.H_aceleration
-                else:
-                   self.aceleration.x = -self.H_aceleration
+                
+                self.aceleration.x = self.H_aceleration
+                
                 self.facingRight = True
                 
                 self.setAnimation_Run()
@@ -110,19 +105,17 @@ class Player(pygame.sprite.Sprite):
         # Vertical movement
             if (keys[pygame.K_UP] or keys[pygame.K_w]):
                 
-                if not self.collidingFromUnder:
-                    self.aceleration.y = -self.V_aceleration
-                else: 
-                    self.aceleration.y = self.V_aceleration
+                
+                self.aceleration.y = -self.V_aceleration
+                
                 
                 
                 self.setAnimation_Run()
             elif (keys[pygame.K_DOWN] or keys[pygame.K_s]):
                
-                if not self.collidingFromTop:
-                    self.aceleration.y = self.V_aceleration
-                else:
-                    self.aceleration.y = -self.V_aceleration
+                
+                self.aceleration.y = self.V_aceleration
+                
                 
                 self.setAnimation_Run()
 
@@ -151,7 +144,36 @@ class Player(pygame.sprite.Sprite):
             
            
             
-            
+        def check_wall_collision(self, walls):
+    
+            # Horizontal movement collision
+            self.rect.centerx = self.pos.x  # Update rect's horizontal position
+            for wall in walls:
+                if self.rect.colliderect(wall.rect):
+                    if self.velocity.x > 0:  # Moving right
+                        self.pos.x = wall.rect.left - self.rect.width / 2
+                    elif self.velocity.x < 0:  # Moving left
+                        self.pos.x = wall.rect.right + self.rect.width / 2
+                    self.velocity.x = 0  # Stop horizontal movement
+                    break  # Only resolve the first collision
+
+            # Vertical movement collision
+            self.rect.centery = self.pos.y  # Update rect's vertical position
+            for wall in walls:
+                if self.rect.colliderect(wall.rect):
+                    if self.velocity.y > 0:  # Moving down
+                        self.pos.y = wall.rect.top - self.rect.height / 2
+                    elif self.velocity.y < 0:  # Moving up
+                        self.pos.y = wall.rect.bottom + self.rect.height / 2
+                    self.velocity.y = 0  # Stop vertical movement
+                    break  # Only resolve the first collision
+
+            # Update rect to match corrected position
+            self.rect.center = self.pos
+
+                
+                    
+
             
     def update(self,win):
         
