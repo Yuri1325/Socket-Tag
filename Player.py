@@ -8,33 +8,43 @@ from images import*
 idleAnimation = ["images/Idle/tile000.png","images/Idle/tile001.png","images/Idle/tile002.png","images/Idle/tile003.png","images/Idle/tile004.png","images/Idle/tile005.png","images/Idle/tile006.png","images/Idle/tile007.png","images/Idle/tile008.png","images/Idle/tile009.png"]
 runAnimation = ["images/Run/tile000.png","images/Run/tile001.png","images/Run/tile002.png","images/Run/tile003.png","images/Run/tile004.png","images/Run/tile005.png","images/Run/tile006.png","images/Run/tile007.png"]
 rollAnimation = ["images/Roll/tile000.png","images/Roll/tile001.png","images/Roll/tile002.png","images/Roll/tile003.png","images/Roll/tile004.png","images/Roll/tile005.png","images/Roll/tile006.png"]
+tagAnimation = ["images/Tag/tile000.png","images/Tag/tile001.png","images/Tag/tile002.png","images/Tag/tile003.png","images/Tag/tile004.png","images/Tag/tile005.png","images/Tag/tile006.png","images/Tag/tile007.png","images/Tag/tile008.png"]
 vector = pygame.math.Vector2
 playerIdle = False
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y,facingRight = True):
+    def __init__(self, x, y,id,won,tagger,gr,facingRight = True,):
         super().__init__()
         self.currentImage = 0
         self.currentAnimation = idleAnimation
-
+        self.id = id 
+        self.gr =gr
+        self.isTagger = tagger
         self.image = pygame.transform.scale(pygame.image.load(self.currentAnimation[self.currentImage]),(92,92))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.mask = pygame.mask.from_surface(self.image)
-        
+        self.won = won
         self.x = x
         self.y = y
         self.pos = vector(self.x,self.y)
         self.velocity = vector(0,0)
         self.aceleration = vector(0,0)
         self.H_aceleration =3
-        self.H_friction = 0.25
+        self.H_friction = 0.2
         self.V_aceleration =3
-        self.V_friction = 0.25
+        self.V_friction = 0.2
         self.last_roll_time = 0  
         self.roll_cooldown = 3   
         self.is_rolling = False 
-        self.roll_duration = 0.5
-        self.roll_speed = 10
+        self.roll_duration = 0.28
+        self.roll_speed = 15
+        #--------------------
+        self.last_tag_time = 0  
+        self.tag_cooldown = 3   
+        self.is_tagging = False 
+        self.tag_duration = 0.28
+        self.tag_speed = 25
+
         self.speed = 10
         self.facingRight = facingRight
         
@@ -49,6 +59,8 @@ class Player(pygame.sprite.Sprite):
         
     def setAnimation_Roll(self):
         self.currentAnimation = rollAnimation
+    def setAnimation_Tag(self):
+        self.currentAnimation = tagAnimation
     def move(self,win):
         keys = pygame.key.get_pressed()
 
@@ -60,7 +72,7 @@ class Player(pygame.sprite.Sprite):
 
         # Handle rolling
     
-        if keys[pygame.K_SPACE] and not self.is_rolling and current_time - self.last_roll_time >= self.roll_cooldown:
+        if (keys[pygame.K_x]or keys[pygame.K_k]) and (not self.is_rolling and not self.is_tagging) and current_time - self.last_roll_time >= self.roll_cooldown:
             self.last_roll_time = current_time
             self.is_rolling = True
             self.setAnimation_Roll()
@@ -72,15 +84,33 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = -self.roll_speed
 
             # Optional: Set vertical velocity for vertical rolls
-            self.velocity.y = 0
+            # self.velocity.y = 0
 
         # End rolling after the roll duration
         if self.is_rolling and current_time - self.last_roll_time >= self.roll_duration:
             self.is_rolling = False
             self.velocity.x = 0  # Stop horizontal rolling movement
+        #----------------------------------------------------------------------------
+        if (keys[pygame.K_z]or keys[pygame.K_j]) and (not self.is_tagging and not self.is_rolling) and current_time - self.last_tag_time >= self.tag_cooldown:
+            self.last_tag_time = current_time
+            self.is_tagging = True
+            self.setAnimation_Tag()
 
+            # Set rolling velocity based on facing direction
+            if self.facingRight:
+                self.velocity.x = self.tag_speed
+            else:
+                self.velocity.x = -self.tag_speed
+
+            # Optional: Set vertical velocity for vertical rolls
+            self.velocity.y = 0
+
+        # End rolling after the roll duration
+        if self.is_tagging and current_time - self.last_tag_time >= self.tag_duration:
+            self.is_tagging = False
+            self.velocity.x = 0  # Stop horizontal rolling movement
         # Handle normal movement if not rolling
-        if not self.is_rolling:
+        if not self.is_rolling and not self.is_tagging:
             # Horizontal movement
 
             if (keys[pygame.K_LEFT] or keys[pygame.K_a]):
