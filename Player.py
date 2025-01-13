@@ -61,7 +61,7 @@ class Player(pygame.sprite.Sprite):
         self.currentAnimation = rollAnimation
     def setAnimation_Tag(self):
         self.currentAnimation = tagAnimation
-    def move(self,win):
+    def move(self,win,walls):
         keys = pygame.key.get_pressed()
 
         # Initialize acceleration
@@ -156,7 +156,7 @@ class Player(pygame.sprite.Sprite):
             # Set idle animation if no movement
             if self.aceleration.x == 0 and self.aceleration.y == 0:
                 self.setAnimation_Idle()
-
+        self.check_wall_collision(walls)
         # Update position and render
         self.update(win)
 
@@ -174,28 +174,28 @@ class Player(pygame.sprite.Sprite):
             
            
             
-        def check_wall_collision(self, walls):
-    
-            # Horizontal movement collision
-            self.rect.centerx = self.pos.x  # Update rect's horizontal position
+    def check_wall_collision(self, walls):
+        # Horizontal movement collision
+              # Update rect's horizontal position
+             
             for wall in walls:
-                if self.rect.colliderect(wall.rect):
-                    if self.velocity.x > 0:  # Moving right
-                        self.pos.x = wall.rect.left - self.rect.width / 2
-                    elif self.velocity.x < 0:  # Moving left
-                        self.pos.x = wall.rect.right + self.rect.width / 2
-                    self.velocity.x = 0  # Stop horizontal movement
+                if self.mask.overlap(wall.mask,(wall.x - self.pos.x,wall.y - self.pos.y)):
+                    if self.velocity.x > 0 and self.pos.x < wall.rect.x:  # Moving right
+                       self.aceleration.x = -self.aceleration.x
+                    elif self.velocity.x < 0 and self.pos.x > wall.rect.x:  # Moving left
+                       self.aceleration.x =-self.aceleration.x
+                    self.velocity.x = 0
                     break  # Only resolve the first collision
 
             # Vertical movement collision
-            self.rect.centery = self.pos.y  # Update rect's vertical position
+            
             for wall in walls:
-                if self.rect.colliderect(wall.rect):
-                    if self.velocity.y > 0:  # Moving down
-                        self.pos.y = wall.rect.top - self.rect.height / 2
-                    elif self.velocity.y < 0:  # Moving up
-                        self.pos.y = wall.rect.bottom + self.rect.height / 2
-                    self.velocity.y = 0  # Stop vertical movement
+                if self.mask.overlap(wall.mask,(wall.x - self.pos.x,wall.y - self.pos.y)):
+                    if self.velocity.y > 0 and self.pos.y < wall.rect.y:  # Moving down
+                        self.aceleration.y = -self.aceleration.y
+                    elif self.velocity.y < 0 and self.pos.y > wall.rect.y:  # Moving up
+                        self.aceleration.y = -self.aceleration.y
+                    self.velocity.y = 0
                     break  # Only resolve the first collision
 
             # Update rect to match corrected position

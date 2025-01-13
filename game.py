@@ -33,8 +33,9 @@ leftWall = Wall(0,300,10,600,False)
 rightWall = Wall(800,300,10,600,False)
 topWall = Wall(400,0,800,10,True)
 bottomWall = Wall(400,600,800,10,True)
+w1 = Wall(200,200,100,100,False)
 startbutton = None
-wallList = [leftWall,rightWall,topWall,bottomWall]
+wallList = [leftWall,rightWall,topWall,bottomWall,w1]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15,True)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
@@ -95,7 +96,7 @@ while run:
 
                     if countdown<=0: 
                         displayTime.txt = str(abs(countdown))
-                        player.move(screen)
+                        player.move(screen,wallList)
                         if countdown > -5:
                             if player.isTagger:
                                 role = Text("You're the tagger",pygame.font.Font("Fonts\yoster.ttf",30),(255,255,255),270,50,screen)
@@ -104,9 +105,11 @@ while run:
                         playerId = Text("You",pygame.font.Font("Fonts\yoster.ttf",10),(255,255,255),player.pos.x -10,player.pos.y - 30,screen)
                         player2Id = Text("Enemy",pygame.font.Font("Fonts\yoster.ttf",10),(255,255,255),player2.pos.x -20,player2.pos.y - 30,screen)
                         player2.update(screen)
-            for wall in wallList:
-                wall.draw(screen)   
-            if countdown < -20:
+                       
+                        for wall in wallList:
+                            wall.draw(screen)
+
+            if countdown < -100:
                  if not player.isTagger:
                       player.won = True
                  else:
