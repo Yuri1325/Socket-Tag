@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.tag_cooldown = 3   
         self.is_tagging = False 
         self.tag_duration = 0.28
-        self.tag_speed = 25
+        self.tag_speed = 50
 
         self.speed = 10
         self.facingRight = facingRight
@@ -179,7 +179,7 @@ class Player(pygame.sprite.Sprite):
               # Update rect's horizontal position
              
             for wall in walls:
-                if self.mask.overlap(wall.mask,(wall.x - self.pos.x,wall.y - self.pos.y)):
+                if self.rect.colliderect(wall.rect):
                     if self.velocity.x > 0 and self.pos.x < wall.rect.x:  # Moving right
                        self.aceleration.x = -self.aceleration.x
                     elif self.velocity.x < 0 and self.pos.x > wall.rect.x:  # Moving left
@@ -190,7 +190,7 @@ class Player(pygame.sprite.Sprite):
             # Vertical movement collision
             
             for wall in walls:
-                if self.mask.overlap(wall.mask,(wall.x - self.pos.x,wall.y - self.pos.y)):
+                if self.rect.colliderect(wall.rect):
                     if self.velocity.y > 0 and self.pos.y < wall.rect.y:  # Moving down
                         self.aceleration.y = -self.aceleration.y
                     elif self.velocity.y < 0 and self.pos.y > wall.rect.y:  # Moving up
