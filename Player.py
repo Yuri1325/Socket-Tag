@@ -103,7 +103,7 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.x = -self.tag_speed
 
             # Optional: Set vertical velocity for vertical rolls
-            self.velocity.y = 0
+            
 
         # End rolling after the roll duration
         if self.is_tagging and current_time - self.last_tag_time >= self.tag_duration:
@@ -181,10 +181,15 @@ class Player(pygame.sprite.Sprite):
             for wall in walls:
                 if self.rect.colliderect(wall.rect):
                     if self.velocity.x > 0 and self.pos.x < wall.rect.x:  # Moving right
-                       self.aceleration.x = -self.aceleration.x
+                        
+                        self.pos.x -= self.velocity.x + (self.aceleration.x)/2
+                        
                     elif self.velocity.x < 0 and self.pos.x > wall.rect.x:  # Moving left
-                       self.aceleration.x =-self.aceleration.x
-                    self.velocity.x = 0
+                        
+                        self.pos.x -= self.velocity.x + (self.aceleration.x)/2
+                        
+                    self.velocity.x =0
+                    
                     break  # Only resolve the first collision
 
             # Vertical movement collision
@@ -192,11 +197,21 @@ class Player(pygame.sprite.Sprite):
             for wall in walls:
                 if self.rect.colliderect(wall.rect):
                     if self.velocity.y > 0 and self.pos.y < wall.rect.y:  # Moving down
-                        self.aceleration.y = -self.aceleration.y
+                       
+                        self.pos.y -= self.velocity.y + (self.aceleration.y)/2
+                        
                     elif self.velocity.y < 0 and self.pos.y > wall.rect.y:  # Moving up
-                        self.aceleration.y = -self.aceleration.y
+    
+                        self.pos.y -= self.velocity.y + (self.aceleration.y)/2
+                    
                     self.velocity.y = 0
                     break  # Only resolve the first collision
+            
+                     
+                    
+                     
+                    
+                
 
             # Update rect to match corrected position
             self.rect.center = self.pos

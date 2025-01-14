@@ -9,6 +9,8 @@ from Button import Button
 import math
 import time
 import socket
+import os
+
 
 
 
@@ -23,21 +25,28 @@ watingForPlayers = True
 screenWidth = 800
 screenHeight = 600
 screen = pygame.display.set_mode((screenWidth,screenHeight))
+os.environ['SDL_VIDEO_WINDOW_POS'] = f'{170},{120}'
 pygame.display.set_caption("PyTag Online")
 pygame.display.set_icon(pygame.image.load("images\Run/tile003.png").convert_alpha())
 clock = pygame.time.Clock()
 run = True
 gameOver = False
 plyr1Won = False
+w1 = Wall(400,300,100,100,False)
+w2 = Wall(150,150,75,75,False)
+w3 = Wall(650,450,75,75,False)
+w4= Wall(650,150,75,75,False)
+w5 = Wall(150,450,75,75,False)
+
 leftWall = Wall(0,300,10,600,False)
 rightWall = Wall(800,300,10,600,False)
 topWall = Wall(400,0,800,10,True)
 bottomWall = Wall(400,600,800,10,True)
-w1 = Wall(400,300,200,200,False)
+
 
 
 startbutton = None
-wallList = [leftWall,rightWall,topWall,bottomWall,w1]
+wallList = [leftWall,rightWall,topWall,bottomWall,w1,w2,w3,w4,w5]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15,True)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
