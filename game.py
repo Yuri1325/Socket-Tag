@@ -42,7 +42,10 @@ leftWall = Wall(0,300,10,600,False)
 rightWall = Wall(800,300,10,600,False)
 topWall = Wall(400,0,800,10,True)
 bottomWall = Wall(400,600,800,10,True)
-
+music = pygame.mixer.Sound("sounds/flat-8-bit-gaming-music-instrumental-211547.mp3")
+pygame.mixer.Sound.play(music,3)
+print("How to Play: The game will start once both players have connected to the sever,Rng will be used to decide whick player is the tagger and which player is the runner. If you're the tagger you have 100 seconds to catch the other player to do so you have to dash into the player if you want a boost you can rool. If you're the runner then you have to runaway for the 100 seconds for a boost you can use dash or roll")
+print("Controls: WASD or Arrows to moves - j or z to dash - k or x to roll")
 
 
 startbutton = None
