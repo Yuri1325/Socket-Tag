@@ -37,6 +37,10 @@ w2 = Wall(150,150,75,75,False)
 w3 = Wall(650,450,75,75,False)
 w4= Wall(650,150,75,75,False)
 w5 = Wall(150,450,75,75,False)
+w6 = Wall(10,10,50,50,False)
+w7 = Wall(10,590,50,50,False)
+w8 = Wall(790,10,50,50,False)
+w9 = Wall(790,590,50,50,False)
 
 leftWall = Wall(0,300,10,600,False)
 rightWall = Wall(800,300,10,600,False)
@@ -49,7 +53,7 @@ print("Controls: WASD or Arrows to moves - j or z to dash - k or x to roll")
 
 
 startbutton = None
-wallList = [leftWall,rightWall,topWall,bottomWall,w1,w2,w3,w4,w5]
+wallList = [leftWall,rightWall,topWall,bottomWall,w1,w2,w3,w4,w5,w6,w7,w8,w9]
 startTime = time.time()
 arial = pygame.font.SysFont("Arial",15,True)
 pxlf1 = pygame.font.Font("Fonts\yoster.ttf",40)
@@ -65,6 +69,7 @@ def intro(timeElapsed):
             presentsCard2 = Text("Presents",pxlf1,(255,255,255),280,250,screen)
         else:
             titleCard = Text("PYTAG ONLINE",pygame.font.Font("Fonts\yoster.ttf",70),(255,255,255),150,100,screen)
+            CredCard = Text("A project created by Uri Richardson",pygame.font.Font("Fonts\yoster.ttf",20),(255,255,255),200,500,screen)
             startButton = Button(400,250,pygame.image.load("images\Buttons/5811aefe875733a49f167ca73a33c02a.png").convert_alpha(),pygame.image.load("images\Buttons\Screenshot 2025-01-08 134028.png").convert_alpha(),screen,0.5)
             startButton.update(screen)
             if startButton.isClicked:
@@ -122,7 +127,7 @@ while run:
                        
                         for wall in wallList:
                             wall.draw(screen)
-
+                        
             if countdown < -100:
                  if not player.isTagger:
                       player.won = True

@@ -207,6 +207,8 @@ class Player(pygame.sprite.Sprite):
                     self.velocity.y = 0
                     break  # Only resolve the first collision
             
+                
+            
                      
                     
                      
